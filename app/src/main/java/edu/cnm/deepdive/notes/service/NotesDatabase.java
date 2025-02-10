@@ -22,7 +22,6 @@ public abstract class NotesDatabase extends RoomDatabase {
   private static final String DATABASE_NAME = "notes";
 
   private static Context context;
-  private static NotesDatabase INSTANCE;
 
   public static String getDatabaseName() {
     return DATABASE_NAME;
@@ -33,12 +32,7 @@ public abstract class NotesDatabase extends RoomDatabase {
   }
 
   public synchronized static NotesDatabase getInstance() {
-    if (INSTANCE == null) {
-      return Room.databaseBuilder(context.getApplicationContext(), NotesDatabase.class,
-              DATABASE_NAME)
-          .build();
-    }
-    return INSTANCE;
+    return Holder.INSTANCE;
   }
 
   public abstract NoteDao getNoteDao();
@@ -64,9 +58,16 @@ public abstract class NotesDatabase extends RoomDatabase {
     @TypeConverter
     public static Uri fromString (String value) {
       return (value != null) ? Uri.parse(value) : null;
-
     }
+  }
 
+  private static class Holder{
+    private static final NotesDatabase INSTANCE;
+    static{
+      INSTANCE = Room
+          .databaseBuilder(context.getApplicationContext(), NotesDatabase.class,DATABASE_NAME)
+          .build();
+    }
   }
 
 }
