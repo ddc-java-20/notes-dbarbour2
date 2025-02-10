@@ -20,7 +20,7 @@ public class Note {
   @ColumnInfo(name="note_id")
   private long id;
 
-  @ColumnInfo(collate = ColumnInfo.NOCASE, index = true)
+  @ColumnInfo(collate = ColumnInfo.NOCASE)
   @NonNull
   private String title = "";
 
