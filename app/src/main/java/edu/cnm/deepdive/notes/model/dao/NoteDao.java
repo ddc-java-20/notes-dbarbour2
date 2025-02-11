@@ -19,7 +19,7 @@ public interface NoteDao {
   @Insert
   Single<Long> insert(Note note);
 
-  default Single<Note> insertAndeReturn(Note note) {
+  default Single<Note> insertAndReturn(Note note) {
     return insert(note)
         .map((id) -> {
           note.setId(id);
@@ -33,7 +33,6 @@ public interface NoteDao {
   @Insert
   Single<List<Long>> insert(Note... notes);
 
-
   @Update
   Completable update(Note note);
 
@@ -41,7 +40,7 @@ public interface NoteDao {
   Completable update(Collection<Note> notes);
 
   @Update
-  Completable update(Note... note);
+  Completable update(Note... notes);
 
   @Delete
   Completable delete(Note note);
@@ -49,8 +48,11 @@ public interface NoteDao {
   @Delete
   Completable delete(Collection<Note> notes);
 
-  @Delete
-  Completable delete(Note... note);
+  @Update
+  Completable delete(Note... notes);
+
+  @Query("SELECT * FROM note WHERE note_id = :id")
+  LiveData<Note> selectById(long id);
 
   @Query("SELECT * FROM note ORDER BY created_on ASC")
   LiveData<List<Note>> selectByCreatedOnAsc();
@@ -58,17 +60,16 @@ public interface NoteDao {
   @Query("SELECT * FROM note ORDER BY created_on DESC")
   LiveData<List<Note>> selectByCreatedOnDesc();
 
-  @Query("SELECT * FROM note WHERE created_on >= :rangeStart AND created_on <:rangeEnd ORDER BY created_on ASC")
-  LiveData<List<Note>> selectWhereCreatedInRangeByCreatedOnAsc(Instant rangeStart, Instant rangeEnd);
+  @Query("SELECT * FROM note WHERE created_on >= :rangeStart AND created_on < :rangeEnd ORDER BY created_on ASC")
+  LiveData<List<Note>> selectWhereCreatedOnInRangeByCreatedOnAsc(Instant rangeStart, Instant rangeEnd);
 
   @Query("SELECT * FROM note ORDER BY title ASC")
-  LiveData<List<Note>> selectBuTitleAsc();
+  LiveData<List<Note>> selectByTitleAsc();
 
   @Query("SELECT * FROM note ORDER BY title DESC")
-  LiveData<List<Note>> selectBuTitleDesc();
+  LiveData<List<Note>> selectByTitleDesc();
 
-  @Query("SELECT * FROM note WHERE title like :filter ORDER BY title DESC")
-  LiveData<List<Note>> selecWhereTitleLikeTitleAsc(String filter);
-
+  @Query("SELECT * FROM note WHERE title LIKE :filter ORDER BY title ASC")
+  LiveData<List<Note>> selectWhereTitleLikeByTitleAsc(String filter);
 
 }
