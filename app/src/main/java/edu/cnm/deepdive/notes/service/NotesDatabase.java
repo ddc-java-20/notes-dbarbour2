@@ -21,18 +21,8 @@ public abstract class NotesDatabase extends RoomDatabase {
   static final int VERSION = 1;
   private static final String DATABASE_NAME = "notes";
 
-  private static Context context;
-
   public static String getDatabaseName() {
     return DATABASE_NAME;
-  }
-
-  public static void setContext(Context context) {
-    NotesDatabase.context = context;
-  }
-
-  public synchronized static NotesDatabase getInstance() {
-    return Holder.INSTANCE;
   }
 
   public abstract NoteDao getNoteDao();
@@ -60,14 +50,4 @@ public abstract class NotesDatabase extends RoomDatabase {
       return (value != null) ? Uri.parse(value) : null;
     }
   }
-
-  private static class Holder{
-    private static final NotesDatabase INSTANCE;
-    static{
-      INSTANCE = Room
-          .databaseBuilder(context.getApplicationContext(), NotesDatabase.class,DATABASE_NAME)
-          .build();
-    }
-  }
-
 }
