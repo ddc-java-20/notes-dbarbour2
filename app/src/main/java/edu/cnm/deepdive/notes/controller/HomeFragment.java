@@ -9,10 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
+import dagger.hilt.android.AndroidEntryPoint;
+import edu.cnm.deepdive.notes.NotesAdapter;
 import edu.cnm.deepdive.notes.R;
 import edu.cnm.deepdive.notes.databinding.FragmentHomeBinding;
 import edu.cnm.deepdive.notes.viewmodel.NoteViewModel;
+import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
 
+@AndroidEntryPoint
 public class HomeFragment extends Fragment {
 
   private FragmentHomeBinding binding;
@@ -20,11 +25,9 @@ public class HomeFragment extends Fragment {
 
   @Override
   public View onCreateView(
-      @NonNull LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+      @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-    // Inflate the layout for this fragment
     return binding.getRoot();
   }
 
@@ -32,14 +35,16 @@ public class HomeFragment extends Fragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     LifecycleOwner lifecycleOwner = getViewLifecycleOwner();
-    viewModel = new ViewModelProvider(this.requireActivity()).get(NoteViewModel.class);
+    viewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
     viewModel
         .getNotes()
         .observe(lifecycleOwner, (notes) -> {
-          // TODO: 2/13/2025 if createing a new adapter each time the data changes, create one no;
-          // otherwise, we need to create on earlier, and it will exit by this time 
-          // TODO: 2/13/2025 pass data to adapter 
-          // TODO: 2/13/2025 notify adapter of change
+          NotesAdapter adapter = new NotesAdapter(requireContext(), notes);
+          binding.notes.setAdapter(adapter);
+          // TODO: 2025-02-13 If creating a new adapter each time the data changes, create one now;
+          //  otherwise, we need to create one earlier, and it will exist by this time.
+          // TODO: 2025-02-13 Pass notes to adapter.
+          // TODO: 2025-02-13 Notify adapter of change.
         });
   }
 }
