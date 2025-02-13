@@ -22,18 +22,19 @@
   </style>
 
   <style name="AppTheme.NoActionBar">
-  <item name="windowActionBar">false</item>
-<item name="windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+    <item name="toolbarStyle">@style/AppTheme.Toolbar</item>
   </style>
 
-<style name="AppTheme.Toolbar" parent="Widget.Material3.Toolbar">
-  <item name="android:background">?attr/colorPrimary</item>
-  <item name="titleTextAppearance">@style/ToolbarTitle</item>
-</style>
+  <style name="AppTheme.Toolbar" parent="Widget.Material3.Toolbar">
+    <item name="android:background">?attr/colorPrimary</item>
+    <item name="titleTextAppearance">@style/ToolbarTitle</item>
+  </style>
 
-<style name="ToolbarTitle">
-<item name="android:textColor">?attr/colorOnPrimary</item>
-  <item name="android:textSize">?attr/toolbarTitleSize</item>
-</style>
+  <style name="ToolbarTitle">
+    <item name="android:textColor">?attr/colorOnPrimary</item>
+    <item name="android:textSize">?attr/toolbarTitleSize</item>
+  </style>
 
 </resources>
