@@ -1,0 +1,10 @@
+[
+  {
+    "title": "Note 1 from json",
+    "content":"this is a boring note that I wrote to remind myself"
+  },
+  {"title": "Note 2 from json",
+  "content":"this is a thrilling note that I wrote"
+}
+
+]

@@ -6,6 +6,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import com.google.gson.annotations.Expose;
 import java.time.Instant;
 
 @Entity(
@@ -22,8 +23,10 @@ public class Note {
 
   @ColumnInfo(collate = ColumnInfo.NOCASE)
   @NonNull
+  @Expose
   private String title = "";
 
+  @Expose
   @NonNull
   private String content = "";
 
