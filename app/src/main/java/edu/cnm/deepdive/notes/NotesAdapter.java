@@ -40,7 +40,7 @@ public class NotesAdapter extends Adapter<ViewHolder> {
 
   private static class Holder extends ViewHolder {
 
-    private ItemNoteBinding binding;
+    private final ItemNoteBinding binding;
 
     public Holder(@NonNull ItemNoteBinding binding) {
       super(binding.getRoot());
