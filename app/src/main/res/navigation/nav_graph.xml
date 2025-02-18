@@ -24,7 +24,7 @@
 
   </fragment>
 
-  <fragment
+  <dialog
     android:id = "@+id/edit_fragment"
     android:name="edu.cnm.deepdive.notes.controller.EditFragment"
     tools:layout="@layout/fragment_edit">
@@ -32,7 +32,6 @@
       android:name="note_id"
       app:argType="long"
       android:defaultValue="0L"/>
-
-  </fragment>
+  </dialog>
 
 </navigation>

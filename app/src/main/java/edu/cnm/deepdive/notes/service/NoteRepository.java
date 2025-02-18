@@ -39,13 +39,14 @@ public class NoteRepository {
     return noteDao.selectById(id);
   }
 
-  public Completable remove(Note note){
-    return noteDao.delete(note);
+  public Completable remove(Note note) {
+    return noteDao
+        .delete(note)
+        .subscribeOn(scheduler);
   }
 
-  public LiveData<List<Note>> getAll(){
+  public LiveData<List<Note>> getAll() {
     return noteDao.selectByCreatedOnAsc();
   }
-
 
 }
