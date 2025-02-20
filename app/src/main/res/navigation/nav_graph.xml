@@ -22,7 +22,7 @@
 
     <action
       android:id="@+id/open_explanation_fragment"
-      app:destination="@+id/explanation_fragment"/>
+      app:destination="@id/explanation_fragment"/>
 
   </fragment>
 
@@ -37,7 +37,7 @@
   </dialog>
 
   <dialog
-    android:id="@+id/explantion_fragment"
+    android:id="@+id/explanation_fragment"
     android:name="edu.cnm.deepdive.notes.controller.ExplanationFragment"/>
 
 
