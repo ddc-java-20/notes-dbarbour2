@@ -76,6 +76,10 @@ public void confirmCapture(boolean success) {
     pendingCaptureUri = null;
 }
 
+public void clearCapture() {
+    captureUri.setValue(null);
+}
+
   public LiveData<Long> getNoteId() {
     return noteId;
   }
