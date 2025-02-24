@@ -16,13 +16,17 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import dagger.hilt.android.AndroidEntryPoint;
+import edu.cnm.deepdive.notes.R;
 import edu.cnm.deepdive.notes.databinding.FragmentEditBinding;
 import edu.cnm.deepdive.notes.model.entity.Note;
 import edu.cnm.deepdive.notes.service.ImageFileProvider;
 import edu.cnm.deepdive.notes.viewmodel.NoteViewModel;
+import java.io.File;
+import java.util.UUID;
 
 @AndroidEntryPoint
 public class EditFragment extends BottomSheetDialogFragment {
@@ -35,6 +39,7 @@ public class EditFragment extends BottomSheetDialogFragment {
   private long noteId;
   private Note note;
   private ActivityResultLauncher<Uri> captureLauncher;
+  private Uri uri;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,9 +61,9 @@ public class EditFragment extends BottomSheetDialogFragment {
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
     binding = FragmentEditBinding.inflate(inflater, container, false);
-    // TODO: 2025-02-18 Attach listeners to UI widgets.
     binding.cancel.setOnClickListener((v) -> dismiss());
     binding.save.setOnClickListener((v) -> save());
+    binding.capture.setOnClickListener((v) -> capture());
     setCaptureVisibility();
     return binding.getRoot();
   }
@@ -94,7 +99,8 @@ public class EditFragment extends BottomSheetDialogFragment {
 
   private void handleCaptureUri(Uri uri) {
     if(uri !=null){
-      note.setImage(uri);
+      this.uri = uri;
+      //note.setImage(uri);
       binding.image.setImageURI(uri);
       binding.image.setVisibility(View.VISIBLE);
     }
@@ -120,6 +126,7 @@ public class EditFragment extends BottomSheetDialogFragment {
     } else {
       binding.image.setVisibility(View.GONE);
     }
+    uri = imageUri;
   }
 
   /** @noinspection DataFlowIssue*/
@@ -132,6 +139,7 @@ public class EditFragment extends BottomSheetDialogFragment {
         .getText()
         .toString()
         .strip());
+    note.setImage(uri);
     // TODO: 2/18/2025 set/modify the created on and modified on
     viewModel.save(note);
     dismiss();
@@ -145,13 +153,15 @@ public class EditFragment extends BottomSheetDialogFragment {
   }
 
   private void capture(){
-    // TODO: 2/24/2025 using the context, get a reference to the directory where images are
-    // TODO: 2/24/2025 ensure directory exists
-    // TODO: 2/24/2025 generate a rancom filename for the captured image
-    // TODO: 2/24/2025 get a uri for the random file, using the provider infrastructure
-    // TODO: 2/24/2025 store the uri in the viewmodel
-    //launch the capture launcher
-
-    String bob = String.valueOf(R.xml.provider_paths);
+    File captureDir = new File(requireContext().getFilesDir(),getString(R.string.capture_directory));
+    //noinspection ResultOfMethodCallIgnored
+    captureDir.mkdir();
+    File captureFile;
+    do{
+      captureFile = new File(captureDir, UUID.randomUUID().toString());
+    } while(captureFile.exists());
+    Uri uri = FileProvider.getUriForFile(requireContext(), AUTHOPRITY, captureFile);
+    viewModel.setPendingCaptureUri(uri);
+    captureLauncher.launch(uri);
   }
 }
