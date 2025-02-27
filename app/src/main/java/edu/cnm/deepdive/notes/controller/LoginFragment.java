@@ -13,9 +13,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.snackbar.Snackbar;
+import edu.cnm.deepdive.notes.R;
 import edu.cnm.deepdive.notes.databinding.FragmentLoginBinding;
 import edu.cnm.deepdive.notes.viewmodel.LoginViewModel;
 
+/** @noinspection deprecation*/
 public class LoginFragment extends Fragment {
 
   private FragmentLoginBinding binding;
@@ -41,25 +46,30 @@ public class LoginFragment extends Fragment {
 
     viewModel
         .getAccount()
-        .observe(owner, account -> {
-
-          if (account != null) {
-            // TODO: 2/27/2025 navigate to home fragment
-          }
-        });
+        .observe(owner, this::handleAccount);
 
     viewModel
         .getSignInThowable()
-        .observe(owner, signInThowable -> {
-          if (signInThowable != null) {
-            // TODO: 2/27/2025 show snackbar with wign in failure message
-          }
-        });
+        .observe(owner, this::handleThrowable);
     launcher = registerForActivityResult(new StartActivityForResult(), viewModel::completeSignIn);
+  }
+
+  private void handleThrowable(Throwable signInThowable) {
+    if (signInThowable != null) {
+      Snackbar.make(binding.getRoot(), R.string.sign_in_failure_message,
+          Snackbar.LENGTH_LONG).show();
+    }
   }
 
   @Override
   public void onDestroyView() {
     super.onDestroyView();
+  }
+
+  private void handleAccount(GoogleSignInAccount account) {
+    if (account != null) {
+      Navigation.findNavController(binding.getRoot())
+          .navigate(LoginFragmentDirections.navigateToHomeFragment());
+    }
   }
 }
