@@ -14,6 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import edu.cnm.deepdive.notes.service.GoogleSignInService;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import javax.inject.Inject;
 
 /**
  * @noinspection deprecation
@@ -29,7 +30,8 @@ public class LoginViewModel extends ViewModel implements DefaultLifecycleObserve
   private final MutableLiveData<Throwable> signInThowable;
   private final CompositeDisposable pending;
 
-  public LoginViewModel(GoogleSignInService signInService) {
+  @Inject
+  LoginViewModel(GoogleSignInService signInService) {
     this.signInService = signInService;
     account = new MutableLiveData<>();
     refreshThowable = new MutableLiveData<>();
